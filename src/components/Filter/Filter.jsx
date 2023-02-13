@@ -1,11 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import css from './Filter.module.css';
 
-const Filter = props => {
-  const updateFilter = event => {
-    props.onFilter(event.target.value);
+import { useSelector, useDispatch } from 'react-redux';
+import { setFilter } from 'redux/filter/filter-slice';
+import { getFilter } from 'redux/filter/filter-selectors';
+
+const Filter = () => {
+  const onSetFilter = payload => {
+    dispatch(setFilter(payload));
   };
+
+  const updateFilter = event => {
+    onSetFilter(event.target.value);
+  };
+
+  const dispatch = useDispatch();
+
+  const filter = useSelector(getFilter);
 
   return (
     <div className={css.searchWrapper}>
@@ -17,15 +28,10 @@ const Filter = props => {
         type="text"
         name="filter"
         onChange={updateFilter}
-        value={props.filter}
+        value={filter}
       />
     </div>
   );
-};
-
-Filter.propTypes = {
-  onFilter: PropTypes.func.isRequired,
-  filter: PropTypes.string.isRequired,
 };
 
 export default Filter;
